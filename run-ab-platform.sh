@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# !/usr/bin/env bash
 
 VERSION=0.63.1
 # Run away from anything even a little scary
@@ -40,8 +40,8 @@ Help()
 ########## Declare assets care about ##########
       docker_compose_yaml="docker-compose.yaml"
 docker_compose_debug_yaml="docker-compose.debug.yaml"
-                  dot_env=".env"
-              dot_env_dev=".env.dev"
+                  dot_env="./.env"
+              dot_env_dev="./.env.dev"
                     flags="flags.yml"
             temporal_yaml="temporal/dynamicconfig/development.yaml"
 # any string is an array to POSIX shell. Space separates values
@@ -215,7 +215,7 @@ TelemetrySend()
 }
 EOL
 )
-    curl -s -o /dev/null -H "Content-Type: application/json" -X POST -d "$body" $telemetryURL
+    curl -s -H "Content-Type: application/json" -X POST -d "$body" --show-error --proxy "http://127.0.0.1:7890" $telemetryURL
     if [[ $state = "success" ]]; then {
       telemetrySuccess=true
     }
@@ -250,6 +250,7 @@ Download()
         --fail\
         --silent\
         --show-error \
+        --proxy "http://127.0.0.1:7890" \
         ${base_github_url}${file} > $file
     fi
   done
